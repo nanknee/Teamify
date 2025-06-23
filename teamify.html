@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Together Learning Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Dark theme styles */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body.dark-theme .container {
+            background: rgba(30, 30, 30, 0.95);
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .nav-tabs {
+            background: #2d2d2d;
+            border-bottom: 2px solid #404040;
+        }
+
+        body.dark-theme .tab {
+            color: #b0b0b0;
+        }
+
+        body.dark-theme .tab.active {
+            color: #4facfe;
+            background: #1a1a1a;
+        }
+
+        body.dark-theme .tab:hover:not(.active) {
+            background: #404040;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .card {
+            background: #2d2d2d;
+            border: 1px solid #404040;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .calendar {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .calendar-day {
+            border: 1px solid #404040;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .calendar-day:hover {
+            background: #404040;
+        }
+
+        body.dark-theme .subject-card {
+            background: #2d2d2d;
+            color: #e0e0e0;
+            border-left: 4px solid #4facfe;
+        }
+
+        body.dark-theme .partner {
+            background: #404040;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .activity-log {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .activity-item {
+            background: #404040;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .modal {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        body.dark-theme .modal-content {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .form-group input,
+        body.dark-theme .form-group textarea,
+        body.dark-theme .form-group select {
+            background: #404040;
+            border: 2px solid #555;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .form-group input:focus,
+        body.dark-theme .form-group textarea:focus,
+        body.dark-theme .form-group select:focus {
+            border-color: #4facfe;
+            background: #4a4a4a;
+        }
+
+        body.dark-theme .form-group label {
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .close {
+            color: #b0b0b0;
+        }
+
+        body.dark-theme .close:hover {
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .progress-bar {
+            background: #404040;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab.active {
+            color: #4facfe;
+            background: white;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .tab:hover:not(.active) {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            transition: width 0.5s ease;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .calendar {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #f8f9fa;
+        }
+
+        .calendar-day.selected {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .calendar-day.has-event {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .subject-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #4facfe;
+            transition: all 0.3s ease;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .partner-progress {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .partner {
+            flex: 1;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .partner h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .activity-log {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .activity-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #4facfe;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .partner-progress {
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 TEAMIFY</h1>
+            <p>JUST DOIN IT</p>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙 Dark</button>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="tab" onclick="showTab('subjects')">📚 Subjects</button>
+            <button class="tab" onclick="showTab('calendar')">📅 Calendar</button>
+            <button class="tab" onclick="showTab('progress')">📈 Progress</button>
+        </div>
+
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalSubjects">0</div>
+                    <div class="stat-label">Active Subjects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completedTasks">0</div>
+                    <div class="stat-label">Tasks Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="studyStreak">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="upcomingEvents">0</div>
+                    <div class="stat-label">Upcoming Events</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>🎯 Today's Goals</h3>
+                    <div id="todayGoals">
+                        <p>No goals set for today. Add some activities!</p>
+                    </div>
+                    <button class="btn" onclick="addTodayGoal()" style="margin-top: 15px;">Add Goal</button>
+                </div>
+
+                <div class="card">
+                    <h3>🔥 Recent Activity</h3>
+                    <div id="recentActivity">
+                        <p>No recent activity. Start learning together!</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>👫 Partner Status</h3>
+                    <div class="partner-progress">
+                        <div class="partner">
+                            <h4>Partner 1</h4>
+                            <p>Active subjects: <span id="partner1Subjects">0</span></p>
+                            <p>Completed today: <span id="partner1Today">0</span></p>
+                        </div>
+                        <div class="partner">
+                            <h4>Partner 2</h4>
+                            <p>Active subjects: <span id="partner2Subjects">0</span></p>
+                            <p>Completed today: <span id="partner2Today">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="subjects" class="tab-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h2>📚 Learning Subjects & Activities</h2>
+                <button class="btn" onclick="showAddSubjectModal()">+ Add New Subject</button>
+            </div>
+
+            <div class="subject-list" id="subjectList">
+                <!-- Subjects will be dynamically added here -->
+            </div>
+        </div>
+
+        <div id="calendar" class="tab-content">
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button class="btn-secondary btn" onclick="previousMonth()">&lt; Previous</button>
+                    <h2 id="currentMonth">January 2024</h2>
+                    <button class="btn-secondary btn" onclick="nextMonth()">Next &gt;</button>
+                </div>
+                
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be generated here -->
+                </div>
+                
+                <button class="btn" onclick="showAddEventModal()" style="margin-top: 20px;">+ Add Event</button>
+            </div>
+
+            <div class="activity-log">
+                <h3>📅 Scheduled Events</h3>
+                <div id="eventsList">
+                    <p>No events scheduled. Add some study sessions!</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="progress" class="tab-content">
+            <h2>📈 Progress Tracking</h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>📊 Overall Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="overallProgress" style="width: 0%"></div>
+                    </div>
+                    <p id="overallProgressText">0% Complete</p>
+                </div>
+
+                <div class="card">
+                    <h3>🏆 Achievements</h3>
+                    <div id="achievements">
+                        <p>🌟 First Subject Added</p>
+                        <p>📚 5 Topics Completed</p>
+                        <p>🔥 7 Day Streak</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-log">
+                <h3>📝 Learning Log</h3>
+                <div id="learningLog">
+                    <p>Your learning journey will appear here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Subject Modal -->
+    <div id="addSubjectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addSubjectModal')">&times;</span>
+            <h2>Add New Subject</h2>
+            <form id="addSubjectForm">
+                <div class="form-group">
+                    <label for="subjectName">Subject Name:</label>
+                    <input type="text" id="subjectName" required>
+                </div>
+                <div class="form-group">
+                    <label for="subjectDescription">Description:</label>
+                    <textarea id="subjectDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="subjectCategory">Category:</label>
+                    <select id="subjectCategory">
+                        <option value="academic">Academic</option>
+                        <option value="skill">Skill Development</option>
+                        <option value="hobby">Hobby</option>
+                        <option value="fitness">Fitness</option>
+                        <option value="language">Language</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="targetHours">Target Hours per Week:</label>
+                    <input type="number" id="targetHours" min="1" max="40" value="5">
+                </div>
+                <button type="submit" class="btn">Add Subject</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="addEventModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addEventModal')">&times;</span>
+            <h2>Add Event</h2>
+            <form id="addEventForm">
+                <div class="form-group">
+                    <label for="eventTitle">Event Title:</label>
+                    <input type="text" id="eventTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventDate">Date:</label>
+                    <input type="date" id="eventDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventTime">Time:</label>
+                    <input type="time" id="eventTime">
+                </div>
+                <div class="form-group">
+                    <label for="eventDescription">Description:</label>
+                    <textarea id="eventDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="eventSubject">Related Subject:</label>
+                    <select id="eventSubject">
+                        <option value="">Select a subject</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Add Event</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Goal Modal -->
+    <div id="addGoalModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addGoalModal')">&times;</span>
+            <h2>Add Today's Goal</h2>
+            <form id="addGoalForm">
+                <div class="form-group">
+                    <label for="goalText">Goal:</label>
+                    <input type="text" id="goalText" required placeholder="e.g., Complete Chapter 3 of Math">
+                </div>
+                <div class="form-group">
+                    <label for="goalSubject">Subject:</label>
+                    <select id="goalSubject">
+                        <option value="">Select a subject</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Add Goal</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let subjects = [];
+        let events = [];
+        let goals = [];
+        let currentDate = new Date();
+        let selectedDate = null;
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateDashboard();
+            generateCalendar();
+            updateSubjectSelects();
+            loadTheme();
+        });
+
+        // Theme management
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (body.classList.contains('dark-theme')) {
+                body.classList.remove('dark-theme');
+                themeToggle.innerHTML = '🌙 Dark';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.add('dark-theme');
+                themeToggle.innerHTML = '☀️ Light';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggle.innerHTML = '☀️ Light';
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggle.innerHTML = '🌙 Dark';
+            }
+        }
+
+        // Tab navigation
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Subject management
+        function showAddSubjectModal() {
+            document.getElementById('addSubjectModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        document.getElementById('addSubjectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const subject = {
+                id: Date.now(),
+                name: document.getElementById('subjectName').value,
+                description: document.getElementById('subjectDescription').value,
+                category: document.getElementById('subjectCategory').value,
+                targetHours: parseInt(document.getElementById('targetHours').value),
+                progress: {
+                    partner1: 0,
+                    partner2: 0
+                },
+                createdAt: new Date().toISOString()
+            };
+            
+            subjects.push(subject);
+            saveData();
+            updateSubjectList();
+            updateDashboard();
+            updateSubjectSelects();
+            closeModal('addSubjectModal');
+            this.reset();
+            
+            addActivity(`New subject "${subject.name}" added!`);
+        });
+
+        function updateSubjectList() {
+            const container = document.getElementById('subjectList');
+            container.innerHTML = '';
+            
+            subjects.forEach(subject => {
+                const card = document.createElement('div');
+                card.className = 'subject-card';
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                        <h3>${subject.name}</h3>
+                        <span class="btn-danger btn" onclick="deleteSubject(${subject.id})" style="padding: 5px 10px; font-size: 0.8em;">Delete</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 15px;">${subject.description || 'No description'}</p>
+                    <p style="margin-bottom: 10px;"><strong>Category:</strong> ${subject.category}</p>
+                    <p style="margin-bottom: 15px;"><strong>Target:</strong> ${subject.targetHours} hours/week</p>
+                    
+                    <div class="partner-progress">
+                        <div class="partner">
+                            <h4>Partner 1</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${subject.progress.partner1}%"></div>
+                            </div>
+                            <p>${subject.progress.partner1}% Complete</p>
+                            <button class="btn" onclick="updateProgress(${subject.id}, 'partner1', 10)" style="padding: 5px 10px; font-size: 0.8em; margin-top: 5px;">+10%</button>
+                        </div>
+                        <div class="partner">
+                            <h4>Partner 2</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${subject.progress.partner2}%"></div>
+                            </div>
+                            <p>${subject.progress.partner2}% Complete</p>
+                            <button class="btn" onclick="updateProgress(${subject.id}, 'partner2', 10)" style="padding: 5px 10px; font-size: 0.8em; margin-top: 5px;">+10%</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            if (subjects.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">No subjects added yet. Click "Add New Subject" to get started!</p>';
+            }
+        }
+
+        function deleteSubject(id) {
+            if (confirm('Are you sure you want to delete this subject?')) {
+                subjects = subjects.filter(s => s.id !== id);
+                saveData();
+                updateSubjectList();
+                updateDashboard();
+                updateSubjectSelects();
+            }
+        }
+
+        function updateProgress(subjectId, partner, amount) {
+            const subject = subjects.find(s => s.id === subjectId);
+            if (subject) {
+                subject.progress[partner] = Math.min(100, subject.progress[partner] + amount);
+                saveData();
+                updateSubjectList();
+                updateDashboard();
+                addActivity(`${partner === 'partner1' ? 'Partner 1' : 'Partner 2'} made progress in ${subject.name}!`);
+            }
+        }
+
+        // Calendar functionality
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            document.getElementById('currentMonth').textContent = 
+                `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            
+            grid.innerHTML = '';
+            
+            // Add day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const header = document.createElement('div');
+                header.textContent = day;
+                header.style.fontWeight = 'bold';
+                header.style.textAlign = 'center';
+                header.style.padding = '10px';
+                header.style.background = '#f8f9fa';
+                grid.appendChild(header);
+            });
+            
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const startingDayOfWeek = firstDay.getDay();
+            
+            // Add empty cells for days before month starts
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day';
+                grid.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                dayElement.onclick = () => selectDate(day);
+                
+                // Check if this day has events
+                const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                if (events.some(event => event.date === dateString)) {
+                    dayElement.classList.add('has-event');
+                }
+                
+                grid.appendChild(dayElement);
+            }
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+
+        function selectDate(day) {
+            selectedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            document.getElementById('eventDate').value = selectedDate;
+            
+            // Visual feedback
+            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+            event.target.classList.add('selected');
+        }
+
+        // Event management
+        function showAddEventModal() {
+            document.getElementById('addEventModal').classList.add('active');
+        }
+
+        document.getElementById('addEventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const event = {
+                id: Date.now(),
+                title: document.getElementById('eventTitle').value,
+                date: document.getElementById('eventDate').value,
+                time: document.getElementById('eventTime').value,
+                description: document.getElementById('eventDescription').value,
+                subjectId: document.getElementById('eventSubject').value,
+                createdAt: new Date().toISOString()
+            };
+            
+            events.push(event);
+            saveData();
+            updateEventsList();
+            updateDashboard();
+            generateCalendar();
+            closeModal('addEventModal');
+            this.reset();
+            
+            addActivity(`New event "${event.title}" scheduled!`);
+        });
+
+        function updateEventsList() {
+            const container = document.getElementById('eventsList');
+            container.innerHTML = '';
+            
+            const sortedEvents = events.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            sortedEvents.forEach(event => {
+                const subject = subjects.find(s => s.id == event.subjectId);
+                const eventElement = document.createElement('div');
+                eventElement.className = 'activity-item';
+                eventElement.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h4>${event.title}</h4>
+                            <p><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()
